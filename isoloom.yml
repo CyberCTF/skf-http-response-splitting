@@ -1,0 +1,29 @@
+# yaml-language-server: $schema=https://www.isoloom.com/schema/v1.json
+# OWASP SKF HTTP Response Splitting (OWASP Security Knowledge Framework labs, by Glenn ten Cate, Riccardo ten Cate and the SKF contributors) as an Isoloom spec:
+# a Flask page that writes the numero parameter into the response unescaped (header and response injection). The SKF lab folder python/http-response-splitting is
+# vendored unchanged in app/ and built by its own Dockerfile.
+# `isoloom generate`, then `isoloom run docker`.
+version: 1
+name: skf-http-response-splitting
+
+networks:
+  lab: { cidr: 10.60.165.0/24, internet: false }
+
+machines:
+  web:
+    networks: { lab: 10 }
+    services: [{ port: 5000, name: web, http: true, publish: 5050 }]
+    resources: { cpus: 1, memory_mb: 256 }
+    docker:
+      build: app
+
+checks:
+  - name: the lab answers
+    http: http://web:5000/
+    wait: 120
+  - name: the numero parameter is written into the /web response
+    script: checks/reflect.sh
+
+message: |
+  OWASP SKF HTTP Response Splitting answers at http://localhost:{{ machines.web.services.0.publish }}/.
+  The form sends a number to /web. Does it have to be a number?

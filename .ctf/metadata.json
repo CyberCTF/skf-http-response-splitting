@@ -1,0 +1,14 @@
+{
+  "title": "OWASP SKF HTTP Response Splitting",
+  "description": "A Flask page that asks for a number between 3 and 13 on /web and writes the numero parameter back into the response, marked as safe markup.",
+  "question": "Inject your own content into the response through the numero parameter, then explain how the same input could split an HTTP response.",
+  "category": "WEB",
+  "difficulty": 2,
+  "evidence_kind": "SECRET",
+  "capabilities": [
+    "response-splitting",
+    "header-injection",
+    "crlf",
+    "xss"
+  ]
+}
